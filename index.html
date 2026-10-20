@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f6f2">
+  <meta name="description" content="An interactive alphabet atlas for Cyrillic, Urdu Nastaliq, Sorani, Kurmanji, Czech and Hebrew.">
+  <title>Script Atlas · Learn writing systems</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@400;600;700&family=Noto+Nastaliq+Urdu:wght@400;600;700&family=Noto+Sans+Hebrew:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="data.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand" href="#cyrillic" aria-label="Script Atlas home"><span class="brand-glyph">✳</span><span>script<span class="brand-light">atlas</span><small>learn to read the world</small></span></a>
+      <div class="header-actions">
+        <span class="header-meta">THE LITTLE ALPHABET LAB</span>
+        <button class="icon-btn" type="button" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">◐</button>
+        <a class="github-link" href="https://github.com/aeirya/learn-writing-systems" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>
+      </div>
+    </header>
+
+    <main>
+      <section class="intro">
+        <div>
+          <p class="kicker"><span class="spark">✦</span> YOUR PERSONAL WRITING SYSTEMS FIELD GUIDE</p>
+          <h1>New letters.<br><em>Familiar sounds.</em></h1>
+          <p class="intro-copy">Learn unfamiliar scripts by connecting them to sounds and letters you already know. Filter, compare, save tricky ones, and test yourself.</p>
+        </div>
+        <div class="intro-decor" aria-hidden="true"><span>Ж</span><span>ش</span><span>א</span><span>Ř</span></div>
+      </section>
+
+      <nav class="script-nav" aria-label="Choose writing system" id="scriptTabs">
+        <button type="button" class="script-tab" data-script="cyrillic">Ж <span>Cyrillic</span></button>
+        <button type="button" class="script-tab" data-script="urdu">ا <span>Urdu</span></button>
+        <button type="button" class="script-tab" data-script="sorani">ڕ <span>Sorani</span></button>
+        <button type="button" class="script-tab" data-script="kurmanji">Ê <span>Kurmanji</span></button>
+        <button type="button" class="script-tab" data-script="czech">Ř <span>Czech</span></button>
+        <button type="button" class="script-tab" data-script="hebrew">א <span>Hebrew</span></button>
+        <button type="button" class="script-tab compare-tab" data-script="compare">⇄ <span>Compare</span></button>
+      </nav>
+
+      <section id="singleView" class="workspace">
+        <aside class="sidebar">
+          <section class="panel">
+            <div class="panel-head"><h2>Focus</h2><button type="button" class="quiet-btn" id="resetBtn">Reset</button></div>
+            <label class="search-label" for="searchInput">FIND A LETTER</label>
+            <div class="search-wrap"><span aria-hidden="true">⌕</span><input type="search" id="searchInput" placeholder="Letter, sound, name, word…" autocomplete="off"></div>
+            <p class="section-label">SHOW ME</p>
+            <div class="filter-list" id="filterList">
+              <label><input type="radio" name="kind" value="all" checked><span>Everything</span></label>
+              <label><input type="radio" name="kind" value="vowel"><span>Vowels</span></label>
+              <label><input type="radio" name="kind" value="consonant"><span>Consonants</span></label>
+              <label><input type="radio" name="kind" value="special"><span>Signs &amp; tricky letters</span></label>
+            </div>
+            <div class="divider"></div>
+            <p class="section-label">STUDY SETTINGS</p>
+            <label class="setting"><span>Persian comparisons<small>Show closest Persian spelling / sound</small></span><input type="checkbox" id="persianToggle" checked></label>
+            <label class="setting"><span>Hide reading hints<small>Reveal on each card</small></span><input type="checkbox" id="hintsToggle"></label>
+            <label class="setting"><span>Saved letters only<small>Your personal study pile</small></span><input type="checkbox" id="savedToggle"></label>
+            <label class="setting" id="extrasSetting"><span>Extra Cyrillic letters<small>Other languages beyond Russian</small></span><input type="checkbox" id="extrasToggle"></label>
+          </section>
+          <section class="panel practice-panel">
+            <div class="panel-head"><h2>Quick practice</h2><span class="mini-star">✳</span></div>
+            <p class="practice-lead">One letter at a time. No pressure.</p>
+            <div class="practice-char" id="practiceChar" aria-live="polite">Ж</div>
+            <div class="practice-answer" id="practiceAnswer" aria-live="polite">Guess its sound or name.</div>
+            <div class="practice-actions">
+              <button type="button" class="primary-btn" id="revealBtn">Reveal answer</button>
+              <button type="button" class="secondary-btn" id="nextBtn">Next →</button>
+            </div>
+            <p class="tiny-note" id="practiceStatus">Drawn from the current selection.</p>
+          </section>
+        </aside>
+
+        <section class="content">
+          <div class="script-heading">
+            <div><p class="kicker" id="scriptEyebrow">01 / RUSSIAN CYRILLIC</p><h2 id="scriptTitle">The Cyrillic alphabet</h2><p class="script-desc" id="scriptDesc"></p></div>
+            <div class="stat-box"><strong id="letterCount">33</strong><span>LETTERS</span></div>
+          </div>
+          <div class="insight-strip" id="scriptInsights"></div>
+          <div class="toolbar">
+            <div class="count-text"><strong id="visibleCount">33</strong> characters in view <span id="savedCount"></span></div>
+            <div class="view-switch" role="group" aria-label="Display mode"><button id="cardsBtn" type="button" aria-pressed="true">▦ Cards</button><button id="tableBtn" type="button" aria-pressed="false">☷ Table</button></div>
+          </div>
+          <div id="cardsArea" class="letter-grid"></div>
+          <div id="tableArea" class="table-scroll" hidden></div>
+          <div id="emptyState" class="empty-state" hidden>Nothing matches these filters. Try resetting the view.</div>
+          <div class="reading-note" id="readingNote"></div>
+        </section>
+      </section>
+
+      <section id="compareView" class="compare-view" hidden>
+        <div class="script-heading"><div><p class="kicker">THE BIG PICTURE</p><h2>One sound, six scripts.</h2><p class="script-desc">Approximate correspondences, not exact transliterations. Choose a sound to compare across languages.</p></div><div class="stat-box compare-stat"><strong>6</strong><span>SYSTEMS</span></div></div>
+        <div id="soundPills" class="sound-pills" aria-label="Choose comparison sound"></div>
+        <div id="compareGrid" class="compare-grid"></div>
+        <p class="reading-note">A dash means that the system has no simple single-letter equivalent in the chart. Similar letters can differ phonetically across languages. Hebrew normally omits short-vowel marks; Sorani usually writes vowels, except short /i/.</p>
+      </section>
+    </main>
+    <footer class="footer"><span>✳ Script Atlas <span class="footer-sep">·</span> A tiny tool for big alphabets</span><span>Runs in your browser. Study progress stays on this device.</span></footer>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
