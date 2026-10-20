@@ -41,6 +41,7 @@
     hints: stored.hints === true,
     savedOnly: false,
     extras: stored.extras === true,
+    forms: stored.forms === true,
     theme: stored.theme === "dark" ? "dark" : "light",
     saved: new Set(Array.isArray(stored.saved) ? stored.saved : [])
   };
@@ -59,7 +60,7 @@
   const savePrefs = () => {
     try { localStorage.setItem(KEY, JSON.stringify({
       view:prefs.view,persian:prefs.persian,hints:prefs.hints,
-      extras:prefs.extras,theme:prefs.theme,saved:[...prefs.saved]
+      extras:prefs.extras,forms:prefs.forms,theme:prefs.theme,saved:[...prefs.saved]
     })); } catch (_) { /* Browser storage may be blocked. */ }
   };
   const getScript = () => data[state.script];
@@ -103,6 +104,17 @@
     ).join("");
     $("readingNote").textContent=s.note;
     $("extrasSetting").hidden=state.script!=="cyrillic";
+    $("formsSetting").hidden=state.script!=="urdu" && state.script!=="sorani";
+  }
+  const NON_JOINING = new Set(["ا","آ","د","ڈ","ذ","ر","ڑ","ز","ژ","و","ۆ","ە","ے","ں","ء","ؤ"]);
+  function joiningForms(row) {
+    if(!prefs.forms || !["urdu","sorani"].includes(state.script)) return "";
+    if(row.g.length!==1 || row.kind==="special" || NON_JOINING.has(row.g)) return "";
+    const glyphs=[row.g,row.g+"ـ","ـ"+row.g+"ـ","ـ"+row.g];
+    const names=["alone","initial","medial","final"];
+    return '<div class="join-forms" title="Schematic shapes; details vary by font">' +
+      glyphs.map((g,i)=>'<div class="join-form"><small>'+names[i]+'</small><span class="'+langClass()+'" dir="rtl">'+safe(g)+'</span></div>').join('') +
+      '</div>';
   }
   function card(row) {
     const hidden = prefs.hints ? "study-hidden" : "";
@@ -127,15 +139,18 @@
       '</div></div><div class="card-letter ' + safe(cls) + '" dir="auto">' + safe(row.g) +
       '</div><div class="'+hidden+'">' + hint + '</div>'+reveal+
       '<div class="kind-tag">' + safe(row.kind.toUpperCase()) + '</div>' +
-      example+p+note+'</article>';
+      example+p+note+joiningForms(row)+'</article>';
   }
   function table(rows) {
     const cls=langClass();
     const persian=prefs.persian;
-    const head='<table class="alphabet-table"><thead><tr><th>#</th><th>Letter</th><th>Name / value</th><th>Sound guide</th>' +
+    const head='<table class="alphabet-table"><thead><tr><th>#</th><th>Letter</th>'+
+      (prefs.forms && ["urdu","sorani"].includes(state.script) ? '<th>Joining</th>' : '')+
+      '<th>Name / value</th><th>Sound guide</th>' +
       (persian?'<th>Persian cue</th>':'') + '<th>Example</th><th>Save</th></tr></thead><tbody>';
     const body=rows.map(row => '<tr><td>'+String(row.i+1).padStart(2,'0')+'</td>' +
       '<td class="table-glyph '+safe(cls)+'" dir="auto">'+safe(row.g)+'</td>' +
+      (prefs.forms && ["urdu","sorani"].includes(state.script) ? '<td>'+joiningForms(row)+'</td>' : '') +
       '<td><strong>'+safe(row.name)+'</strong><br><span class="card-sound">'+safe(row.r)+'</span></td>' +
       '<td>'+safe(row.sound)+(row.note?'<br><small class="card-note">'+safe(row.note)+'</small>':'')+'</td>' +
       (persian?'<td>'+native(row.fa||"—","persian-script")+'</td>':'') +
@@ -264,13 +279,13 @@
   }));
   bind("resetBtn","click",()=>{
     state.kind="all";state.search="";state.practice=null;
-    prefs.savedOnly=false;prefs.hints=false;prefs.persian=true;prefs.extras=false;
+    prefs.savedOnly=false;prefs.hints=false;prefs.persian=true;prefs.extras=false;prefs.forms=false;
     $("searchInput").value="";$("savedToggle").checked=false;
-    $("hintsToggle").checked=false;$("persianToggle").checked=true;$("extrasToggle").checked=false;
+    $("hintsToggle").checked=false;$("persianToggle").checked=true;$("extrasToggle").checked=false;$("formsToggle").checked=false;
     document.querySelector('input[name="kind"][value="all"]').checked=true;
     savePrefs();render();toast("Filters reset");
   });
-  [["persianToggle","persian"],["hintsToggle","hints"],["savedToggle","savedOnly"],["extrasToggle","extras"]].forEach(([id,key])=>{
+  [["persianToggle","persian"],["hintsToggle","hints"],["savedToggle","savedOnly"],["extrasToggle","extras"],["formsToggle","forms"]].forEach(([id,key])=>{
     $(id).checked=prefs[key];
     bind(id,"change",e=>{prefs[key]=e.target.checked;state.practice=null;savePrefs();renderRows();});
   });
