@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Armenian handwriting · Script Atlas</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .armenian-page { max-width: 1120px; margin: auto; padding: 24px 16px 48px; }
+  .armenian-page h1 { font-size: clamp(2rem,5vw,3.5rem); margin: 12px 0; }
+  .armenian-page h2 { margin: 32px 0 10px; }
+  .armenian-page p { line-height: 1.6; }
+  .hand-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(175px,1fr)); gap:14px; margin:16px 0; }
+  .phrase-grid { grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); }
+  .hand-card { border:1px solid #cbc9c1; border-radius:12px; padding:10px; background:#fff; color:#242422; text-align:center; min-width:0; }
+  .hand-card img { display:block; width:100%; height:auto; aspect-ratio:1; background:white; }
+  .hand-card strong { font-size:1.55rem; display:block; }
+  .hand-card small { display:block; line-height:1.5; }
+  .hand-card a { color:#242422; }
+  .case-label { font-weight:700; font-size:.83rem; color:#365c42; }
+  .phrase { font-size:clamp(1.7rem,5vw,3rem); line-height:1.5; }
+  .hand-controls { display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
+  .hand-controls input { padding:10px 12px; border:1px solid #aaa; border-radius:8px; color:#222; background:white; min-width:0; }
+  .hand-controls button { padding:10px; cursor:pointer; }
+  @media(max-width:420px){.hand-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.hand-card{padding:6px}}
+  @media print { .hand-controls, .site-header, .back-link {display:none!important} .hand-card {break-inside:avoid} .hand-grid {grid-template-columns:repeat(5,1fr)} }
+</style>
+<script src="handwriting.js" defer></script>
+</head>
+<body>
+<div class="armenian-page">
+<header class="site-header"><a class="brand" href="../"><span class="brand-glyph">✳</span><span>script<span class="brand-light">atlas</span><small>learn to read the world</small></span></a><a class="github-link" href="https://github.com/aeirya/learn-writing-systems">GitHub ↗</a></header>
+<main>
+<p class="kicker">07 / ARMENIAN · ՀԱՅԵՐԵՆ</p>
+<h1>Armenian handwriting</h1>
+<p>Compare printed letters with real handwritten uppercase (left) and lowercase (right). Armenian is written from left to right. Click any illustration to enlarge its original SVG.</p>
+<section aria-labelledby="birthday">
+<h2 id="birthday">Write your first greeting</h2>
+<p class="phrase" lang="hy">Շնորհավոր ծնունդդ։</p>
+<p><strong>Happy birthday!</strong> · Letter-by-letter: sh-n-o-r-h-a-v-o-r ts-n-u-n-d-d (Eastern Armenian; spoken pronunciation includes unwritten vowels). The ending դ is written twice. The two dots ։ are the Armenian full stop.</p>
+<h3 lang="hy">Շնորհավոր</h3><div class="hand-grid phrase-grid" id="word-one"></div>
+<h3 lang="hy">ծնունդդ</h3><div class="hand-grid phrase-grid" id="word-two"></div>
+<p>Use the left-hand shape for the initial Շ; use the right-hand shape for all the other letters. Ու / ու represents one vowel with two characters.</p>
+</section>
+<section aria-labelledby="alphabet">
+<h2 id="alphabet">The complete modern alphabet</h2>
+<p>39 entries following the modern reformed inventory. Eastern and Western Armenian differ in several consonant sounds; the romanization hints favor Eastern Armenian. IPA values are broad, and actual pronunciation varies with position and dialect. Historical Ւ/ւ is a component of ու in reformed spelling.</p>
+<div class="hand-controls"><label for="filter">Find a letter or sound</label><input type="search" id="filter" placeholder="շ, sh, /ʃ/…"><button type="button" id="print">Print reference</button></div>
+<div id="alphabet-grid" class="hand-grid"></div>
+<p id="empty" hidden>No matching letters.</p>
+</section>
+<footer>
+<p>Handwriting artwork by <a href="https://commons.wikimedia.org/wiki/User:%E3%81%9D%E3%82%89%E3%81%BF%E3%81%BF">そらみみ</a>, via <a href="https://commons.wikimedia.org/wiki/Category:Armenian_handwritten_upper-_and_lower-case_pairs_with_font_lines">Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Original images unchanged; individual source links are on each card. Pronunciation reference: <a href="https://en.wikipedia.org/wiki/Armenian_alphabet#Alphabet">Armenian alphabet</a>. The artwork retains its own license, separate from the site's code.</p>
+<a class="back-link" href="../">← All writing systems</a>
+</footer>
+</main></div>
+</body>
+</html>

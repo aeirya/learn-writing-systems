@@ -12,12 +12,13 @@ A small, static, browser-based study panel inspired by [esponyol-inator](https:/
 | **Kurmanji Kurdish** | 31 Hawar Latin letters |
 | **Czech** | 42 alphabet entries, including **Ch** |
 | **Hebrew** | 22 letters, their final shapes, and 7 niqqud examples |
+| **[Armenian handwriting](armenian/)** | 39 uppercase/lowercase handwriting illustrations, IPA and a birthday greeting reference |
 
 The letter counts follow the conventions used in this tool; inventory conventions can vary, especially for Urdu and Sorani.
 
 ## Features
 
-- One tab per script, plus a **Compare** view grouping approximate sounds across all six.
+- One tab per script, plus a **Compare** view grouping approximate sounds across the six interactive comparison tabs; Armenian handwriting has a dedicated reference page.
 - Search by letter, romanization, letter name, sound, Persian cue, or sample word.
 - Filter by vowels, consonants, and tricky characters.
 - Switch between **cards** and **compact tables**.
@@ -52,6 +53,7 @@ If the link is not live yet, enable **Settings → Pages → Build and deploymen
 - `styles.css`: responsive UI and script typography
 - `data.js`: script inventories, phonetic notes, words and Persian comparisons
 - `app.js`: tabs, search, filters, practice, comparison and local progress
+- `armenian/`: dedicated handwriting page, original SVG assets and download script (artwork CC BY-SA 4.0; see `armenian/images/README.md`)
 
 To add or fix an entry, edit the corresponding `raw` table in `data.js`. Each row is separated by a newline; fields use `|`:
 
