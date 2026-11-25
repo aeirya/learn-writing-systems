@@ -22,6 +22,14 @@
   .hand-controls { display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
   .hand-controls input { padding:10px 12px; border:1px solid #aaa; border-radius:8px; color:#222; background:white; min-width:0; }
   .hand-controls button { padding:10px; cursor:pointer; }
+  .input-mode { display:flex; flex-wrap:wrap; gap:12px; border:0; padding:0; margin:0; }
+  .input-mode legend { font-weight:600; margin-bottom:8px; }
+  .input-mode label { display:flex; align-items:center; gap:6px; cursor:pointer; }
+  .armenian-keys { display:grid; grid-template-columns:repeat(auto-fill,minmax(44px,1fr)); gap:6px; margin:10px 0; }
+  .armenian-keys button { min-height:44px; font-size:1.2rem; padding:4px; cursor:pointer; }
+  .armenian-keys .key-wide { grid-column:span 2; font-size:.9rem; }
+  .keyboard-controls { margin-top:10px; }
+  .guide-input .input-mode input, .keyboard-controls input { width:auto; padding:0; }
   .guide-presets { display:flex; flex-wrap:wrap; gap:8px; margin:14px 0; }
   .guide-presets button { padding:10px 14px; border-radius:8px; cursor:pointer; }
   .guide-input { display:grid; gap:8px; margin:16px 0; }
@@ -52,13 +60,24 @@
 <p>Compare printed letters with real handwritten uppercase (left) and lowercase (right). Armenian is written from left to right. Click any illustration to enlarge its original SVG.</p>
 <section aria-labelledby="writing-guide">
 <h2 id="writing-guide">Sentence writing guide</h2>
-<p>Type Armenian using Latin letters, or paste Armenian text. The guide shows each handwritten letter in order. This is a transliteration tool, not an English-to-Armenian translator.</p>
+<p>Type or paste the exact Armenian spelling, or switch to Latin transliteration. The guide shows each handwritten letter in order. Latin input is a convenience, not a translator or spell checker.</p>
 <div class="guide-presets" id="presets" aria-label="Example sentences"></div>
 <div class="guide-input">
-<label for="sentence"><strong>Sentence in Latin letters</strong></label>
-<textarea id="sentence" rows="2" maxlength="240" spellcheck="false" autocomplete="off" aria-describedby="roman-help" placeholder="Shnorhavor tsnundd."></textarea>
+<fieldset class="input-mode">
+<legend>Input script</legend>
+<label><input type="radio" name="input-mode" value="armenian" checked> Armenian (Հայերեն)</label>
+<label><input type="radio" name="input-mode" value="latin"> Latin transliteration</label>
+</fieldset>
+<label for="sentence"><strong id="sentence-label">Sentence in Armenian</strong></label>
+<textarea id="sentence" lang="hy" rows="2" maxlength="240" spellcheck="false" autocomplete="off" placeholder="Շնորհավոր ծնունդդ։"></textarea>
+<p id="input-help" class="tiny-note">Armenian mode preserves exactly what you type, including punctuation. Use the keyboard below if you don't have an Armenian keyboard installed.</p>
+<details id="armenian-keyboard" class="roman-help">
+<summary>Armenian keyboard</summary>
+<div class="hand-controls keyboard-controls"><label><input type="checkbox" id="keyboard-uppercase"> Uppercase</label><button type="button" class="secondary-btn" id="keyboard-backspace">⌫ Backspace</button></div>
+<div class="armenian-keys" id="armenian-keys" aria-label="Armenian alphabet keyboard"></div>
+</details>
 </div>
-<details id="roman-help" class="roman-help">
+<details id="roman-help" class="roman-help" hidden>
 <summary>Transliteration key &amp; spelling tips</summary>
 <p>These are Eastern Armenian letter-by-letter conventions, not automatic phonetic spelling. Capitalize a Latin letter or digraph to get its uppercase Armenian form. At the start of a word, <code>ye</code> and <code>vo</code> give ե and ո. A period becomes the Armenian full stop (։).</p>
 <div id="roman-key" class="roman-key"></div>

@@ -381,6 +381,24 @@ const preview = document.getElementById('sentence-preview');
 const guide = document.getElementById('sentence-guide');
 const warning = document.getElementById('sentence-warning');
 const copyStatus = document.getElementById('copy-status');
+const modeInputs = [...document.querySelectorAll('input[name="input-mode"]')];
+let inputMode = 'armenian';
+function sentenceOutput(input, mode) {
+  return mode === 'latin' ? transliterate(input) : {output:input,unknown:[]};
+}
+function setInputMode(mode) {
+  inputMode=mode;
+  modeInputs.forEach(input=>{input.checked=input.value===mode;});
+  const armenian=mode==='armenian';
+  document.getElementById('sentence-label').textContent=armenian?'Sentence in Armenian':'Sentence in Latin letters';
+  sentence.lang=armenian?'hy':'en';
+  sentence.placeholder=armenian?presets[0].armenian:presets[0].latin;
+  document.getElementById('input-help').textContent=armenian
+    ?'Exact Armenian spelling is preserved, including punctuation. Type, paste, or use the Armenian keyboard below.'
+    :'Latin letters are converted using the transliteration key. This does not check Armenian spelling.';
+  document.getElementById('roman-help').hidden=armenian;
+  document.getElementById('armenian-keyboard').hidden=!armenian;
+}
 const byGlyph = new Map();
 for (const row of letters) {
   byGlyph.set(row[0],row); byGlyph.set(row[1],row);
@@ -396,7 +414,7 @@ function symbolCard(glyph) {
   box.append(symbol,note); return box;
 }
 function renderSentence() {
-  const {output,unknown}=transliterate(sentence.value);
+  const {output,unknown}=sentenceOutput(sentence.value,inputMode);
   preview.textContent=output;
   copyStatus.textContent='';
   const words=output.match(/\S+/gu)||[];
@@ -413,15 +431,15 @@ function renderSentence() {
     group.append(title,grid); return group;
   }));
   warning.hidden=missing.size===0;
-  warning.textContent=missing.size?'No handwriting mapping for: '+[...missing].join(', ')+'. Check the transliteration key.':'';
+  warning.textContent=missing.size?'No handwriting mapping for: '+[...missing].join(', ')+(inputMode==='latin'?'. Check the transliteration key.':'. Enter Armenian letters or switch to Latin transliteration.'):'';
   document.getElementById('copy-sentence').disabled=!output.trim();
-  document.querySelectorAll('#presets button').forEach(btn=>btn.setAttribute('aria-pressed',String(sentence.value===btn.dataset.sentence)));
+  document.querySelectorAll('#presets button').forEach(btn=>btn.setAttribute('aria-pressed',String(inputMode==='armenian' && sentence.value===btn.dataset.sentence)));
 }
 for(const preset of presets){
   const button=document.createElement('button');
-  button.type='button'; button.className='secondary-btn'; button.dataset.sentence=preset.latin;
-  button.textContent=preset.label; button.title=preset.armenian;
-  button.addEventListener('click',()=>{sentence.value=preset.latin;renderSentence();});
+  button.type='button'; button.className='secondary-btn'; button.dataset.sentence=preset.armenian;
+  button.textContent=preset.label+' · '+preset.armenian; button.title=preset.armenian;
+  button.addEventListener('click',()=>{setInputMode('armenian');sentence.value=preset.armenian;renderSentence();});
   document.getElementById('presets').append(button);
 }
 const keyEntries=Object.entries(romanMap).filter(([key])=>/^[a-z]+(?:')?$/.test(key));
@@ -429,12 +447,50 @@ for(const [latin,glyph] of keyEntries){
   const span=document.createElement('span');span.textContent=latin+' → '+glyph;
   document.getElementById('roman-key').append(span);
 }
+modeInputs.forEach(input=>input.addEventListener('change',()=>{
+  if(!input.checked)return;
+  // Convert Latin input once when moving into exact Armenian mode; otherwise retain text.
+  if(inputMode==='latin' && input.value==='armenian')sentence.value=transliterate(sentence.value).output;
+  setInputMode(input.value);
+  renderSentence();
+}));
+const keyboard=document.getElementById('armenian-keys');
+const uppercase=document.getElementById('keyboard-uppercase');
+function insertAtCursor(value) {
+  const start=sentence.selectionStart, end=sentence.selectionEnd;
+  if(sentence.value.length-(end-start)+value.length>sentence.maxLength)return;
+  sentence.setRangeText(value,start,end,'end');
+  sentence.focus();
+  renderSentence();
+}
+function renderKeyboard() {
+  const keys=letters.map(row=>uppercase.checked?row[0]:row[1]);
+  keys.push('։','՝','՞','՛',' ');
+  keyboard.replaceChildren(...keys.map(glyph=>{
+    const button=document.createElement('button');
+    button.type='button';button.className='secondary-btn';
+    button.textContent=glyph===' '?'Space':glyph;
+    if(glyph===' ')button.classList.add('key-wide');
+    button.addEventListener('pointerdown',event=>event.preventDefault());
+    button.addEventListener('click',()=>insertAtCursor(glyph));
+    return button;
+  }));
+}
+uppercase.addEventListener('change',renderKeyboard);
+document.getElementById('keyboard-backspace').addEventListener('pointerdown',event=>event.preventDefault());
+document.getElementById('keyboard-backspace').addEventListener('click',()=>{
+  const start=sentence.selectionStart,end=sentence.selectionEnd;
+  sentence.setRangeText('',start===end?Math.max(0,start-1):start,end,'end');
+  sentence.focus();renderSentence();
+});
+renderKeyboard();
 sentence.addEventListener('input',renderSentence);
 document.getElementById('copy-sentence').addEventListener('click',async()=>{
   try {await navigator.clipboard.writeText(preview.textContent);copyStatus.textContent='Copied.';}
   catch {copyStatus.textContent='Select and copy the Armenian text above.';}
 });
-sentence.value=presets[0].latin;
+setInputMode('armenian');
+sentence.value=presets[0].armenian;
 renderSentence();
 const filter=document.getElementById('filter');
 function render() {
