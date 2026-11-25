@@ -346,6 +346,7 @@ function card(row, wanted) {
     const w=document.createElement('small'); w.textContent='/'+west+'/ (Western)'; box.append(w);
     const src=document.createElement('a'); src.href=source; src.target='_blank'; src.rel='noopener'; src.textContent='Source'; box.append(src);
   }
+  appendWritingTutorials(box,upper);
   return box;
 }
 function hiwnCard(wanted) {
@@ -362,7 +363,9 @@ function hiwnCard(wanted) {
   const hint=document.createElement('small'); hint.textContent='hiwn · w (romanization), /v/ in շնորհաւոր';
   const note=document.createElement('small'); note.textContent=wanted==='Ւ'?'No verified uppercase handwriting sample in this collection.':'Lowercase ւ · extracted from the handwritten ու example';
   const src=document.createElement('a'); src.href='https://commons.wikimedia.org/wiki/File:%D5%88%D6%82_handwritten.svg'; src.target='_blank';src.rel='noopener';src.textContent='Original handwriting source';
-  box.append(title,hint,note,src);return box;
+  box.append(title,hint,note,src);
+  appendWritingTutorials(box,'Ւ');
+  return box;
 }
 const romanMap = {"ch'":"չ","ts'":"ց","t'":"թ","p'":"փ","k'":"ք","sh":"շ","zh":"ժ","kh":"խ","gh":"ղ","dz":"ձ","ts":"ծ","ch":"ճ","rr":"ռ","uh":"ը","eh":"է","oh":"օ","ew":"և","a":"ա","b":"բ","g":"գ","d":"դ","e":"ե","z":"զ","ë":"ը","ə":"ը","ē":"է","i":"ի","l":"լ","x":"խ","k":"կ","h":"հ","m":"մ","y":"յ","n":"ն","o":"ո","p":"պ","j":"ջ","s":"ս","v":"վ","w":"ւ","t":"տ","r":"ր","u":"ու","q":"ք","f":"ֆ","š":"շ","ž":"ժ","č":"ճ","ł":"ղ","ṙ":"ռ","ō":"օ","c":"ծ"};
 const presets = [

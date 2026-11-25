@@ -69,6 +69,10 @@ These are beginner-friendly approximations, not exact cross-language transcripti
 
 Schematic joining-form displays use tatweel to illustrate shape changes; they are **not** meant as copyable spellings. Speech playback is disabled with an explanatory message when the required language voice is unavailable.
 
+## Learning resources and future development
+
+See [learning resources and development notes](LEARNING-RESOURCES.md) for Meshk, its free worksheet generator, the Hrant Dink Foundation handwriting videos, and ideas for future handwriting features.
+
 ## Background references
 
 - [Czech orthography — Czech alphabet](https://en.wikipedia.org/wiki/Czech_orthography)
