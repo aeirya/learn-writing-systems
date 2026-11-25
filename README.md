@@ -53,7 +53,7 @@ If the link is not live yet, enable **Settings → Pages → Build and deploymen
 - `styles.css`: responsive UI and script typography
 - `data.js`: script inventories, phonetic notes, words and Persian comparisons
 - `app.js`: tabs, search, filters, practice, comparison and local progress
-- `armenian/`: dedicated handwriting page, original SVG assets and download script (artwork CC BY-SA 4.0; see `armenian/images/README.md`)
+- `armenian/`: dedicated handwriting page, [confusing-letter comparisons](armenian/confusing-letters/), original SVG assets and download script (artwork CC BY-SA 4.0; see `armenian/images/README.md`)
 
 To add or fix an entry, edit the corresponding `raw` table in `data.js`. Each row is separated by a newline; fields use `|`:
 
