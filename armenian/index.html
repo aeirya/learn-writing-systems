@@ -30,6 +30,8 @@
   .armenian-keys .key-wide { grid-column:span 2; font-size:.9rem; }
   .keyboard-controls { margin-top:10px; }
   .guide-input .input-mode input, .keyboard-controls input { width:auto; padding:0; }
+  .hiwn-printed { display:grid; place-items:center; aspect-ratio:1; font-size:4rem; }
+  .hand-card img.hiwn-image { object-fit:contain; }
   .guide-presets { display:flex; flex-wrap:wrap; gap:8px; margin:14px 0; }
   .guide-presets button { padding:10px 14px; border-radius:8px; cursor:pointer; }
   .guide-input { display:grid; gap:8px; margin:16px 0; }
@@ -57,7 +59,7 @@
 <main>
 <p class="kicker">07 / ARMENIAN · ՀԱՅԵՐԵՆ</p>
 <h1>Armenian handwriting</h1>
-<p>Compare printed letters with real handwritten uppercase (left) and lowercase (right). Armenian is written from left to right. Click any illustration to enlarge its original SVG.</p>
+<p>Compare printed letters with real handwritten uppercase (left) and lowercase (right). Armenian is written from left to right. Click an illustration to enlarge it. The traditional ւ has a separately marked extracted handwriting sample.</p>
 <section aria-labelledby="writing-guide">
 <h2 id="writing-guide">Sentence writing guide</h2>
 <p>Type or paste the exact Armenian spelling, or switch to Latin transliteration. The guide shows each handwritten letter in order. Latin input is a convenience, not a translator or spell checker.</p>
@@ -81,23 +83,23 @@
 <summary>Transliteration key &amp; spelling tips</summary>
 <p>These are Eastern Armenian letter-by-letter conventions, not automatic phonetic spelling. Capitalize a Latin letter or digraph to get its uppercase Armenian form. At the start of a word, <code>ye</code> and <code>vo</code> give ե and ո. A period becomes the Armenian full stop (։).</p>
 <div id="roman-key" class="roman-key"></div>
-<p>Use <code>ch'</code>, <code>ts'</code>, <code>t'</code>, <code>p'</code>, <code>k'</code> for aspirated consonants. <code>uh</code> (or ë) writes ը; <code>eh</code> writes է; <code>oh</code> writes օ; <code>ew</code> writes և. <code>u</code> writes the two-character vowel ու. For ambiguous spellings, type or paste the exact Armenian letter. Spoken vowels may be unwritten, so check unfamiliar words against a dictionary.</p>
+<p>Use <code>ch'</code>, <code>ts'</code>, <code>t'</code>, <code>p'</code>, <code>k'</code> for aspirated consonants. <code>uh</code> (or ë) writes ը; <code>eh</code> writes է; <code>oh</code> writes օ; <code>ew</code> writes և. <code>u</code> writes the two-character vowel ու; <code>w</code> writes traditional ւ. For ambiguous spellings, type or paste the exact Armenian letter. Spoken vowels may be unwritten, so check unfamiliar words against a dictionary.</p>
 </details>
 <p class="phrase" lang="hy" id="sentence-preview" aria-live="polite"></p>
 <p id="sentence-warning" role="status" hidden></p>
 <div class="hand-controls"><button type="button" class="secondary-btn" id="copy-sentence">Copy Armenian text</button><span id="copy-status" role="status"></span></div>
 <div id="sentence-guide"></div>
-<p>Use the left-hand shape for uppercase and the right-hand shape for lowercase. Click an image to see it at full size.</p>
+<p>For paired illustrations, use the left-hand shape for uppercase and the right-hand shape for lowercase. The extracted ւ sample shows only lowercase; uppercase Ւ has a printed reference. Click an image to see it at full size.</p>
 </section>
 <section aria-labelledby="alphabet">
-<h2 id="alphabet">The complete modern alphabet</h2>
-<p>39 entries following the modern reformed inventory. Eastern and Western Armenian differ in several consonant sounds; the romanization hints favor Eastern Armenian. IPA values are broad, and actual pronunciation varies with position and dialect. Historical Ւ/ւ is a component of ու in reformed spelling.</p>
+<h2 id="alphabet">Traditional and reformed Armenian alphabet</h2>
+<p>40 reference entries covering the traditional alphabet and the modern reformed inventory, including Ւ/ւ, Ու/ու and Եւ/և. Eastern and Western Armenian differ in several consonant sounds; romanization hints favor Eastern Armenian. IPA values are broad. In traditional spelling ւ often represents /v/; in reformed spelling it survives as a component of ու.</p>
 <div class="hand-controls"><label for="filter">Find a letter or sound</label><input type="search" id="filter" placeholder="շ, sh, /ʃ/…"><button type="button" id="print">Print reference</button></div>
 <div id="alphabet-grid" class="hand-grid"></div>
 <p id="empty" hidden>No matching letters.</p>
 </section>
 <footer>
-<p>Handwriting artwork by <a href="https://commons.wikimedia.org/wiki/User:%E3%81%9D%E3%82%89%E3%81%BF%E3%81%BF">そらみみ</a>, via <a href="https://commons.wikimedia.org/wiki/Category:Armenian_handwritten_upper-_and_lower-case_pairs_with_font_lines">Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Original images unchanged; individual source links are on each card. Pronunciation reference: <a href="https://en.wikipedia.org/wiki/Armenian_alphabet#Alphabet">Armenian alphabet</a>. The artwork retains its own license, separate from the site's code.</p>
+<p>Handwriting artwork by <a href="https://commons.wikimedia.org/wiki/User:%E3%81%9D%E3%82%89%E3%81%BF%E3%81%BF">そらみみ</a>, via <a href="https://commons.wikimedia.org/wiki/Category:Armenian_handwritten_upper-_and_lower-case_pairs_with_font_lines">Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. The 39 original images are unchanged. The additional lowercase hiwn (ւ) sample is extracted from the original handwritten ու SVG and is also CC BY-SA 4.0. Individual source links are on each card. Pronunciation reference: <a href="https://en.wikipedia.org/wiki/Armenian_alphabet#Alphabet">Armenian alphabet</a>. The artwork retains its own license, separate from the site's code.</p>
 <a class="back-link" href="../">← All writing systems</a>
 </footer>
 </main></div>

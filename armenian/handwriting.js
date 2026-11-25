@@ -265,6 +265,14 @@ const letters = [
     "70"
   ],
   [
+    "Ւ",
+    "ւ",
+    "w / v (hiwn)",
+    "v (traditional)",
+    "v (traditional)",
+    ""
+  ],
+  [
     "Ու",
     "ու",
     "u",
@@ -316,6 +324,7 @@ const letters = [
 const byLower = new Map(letters.map(row => [row[1],row]));
 function card(row, wanted) {
   const [upper,lower,roman,east,west,hash] = row;
+  if (upper==='Ւ') return hiwnCard(wanted);
   const filename = upper + '_handwritten.svg';
   const remote = 'https://upload.wikimedia.org/wikipedia/commons/' + hash[0] + '/' + hash + '/' + encodeURIComponent(filename);
   const source = 'https://commons.wikimedia.org/wiki/File:' + encodeURIComponent(filename);
@@ -339,17 +348,38 @@ function card(row, wanted) {
   }
   return box;
 }
-const romanMap = {"ch'":"չ","ts'":"ց","t'":"թ","p'":"փ","k'":"ք","sh":"շ","zh":"ժ","kh":"խ","gh":"ղ","dz":"ձ","ts":"ծ","ch":"ճ","rr":"ռ","uh":"ը","eh":"է","oh":"օ","ew":"և","a":"ա","b":"բ","g":"գ","d":"դ","e":"ե","z":"զ","ë":"ը","ə":"ը","ē":"է","i":"ի","l":"լ","x":"խ","k":"կ","h":"հ","m":"մ","y":"յ","n":"ն","o":"ո","p":"պ","j":"ջ","s":"ս","v":"վ","t":"տ","r":"ր","u":"ու","q":"ք","f":"ֆ","š":"շ","ž":"ժ","č":"ճ","ł":"ղ","ṙ":"ռ","ō":"օ","c":"ծ"};
+function hiwnCard(wanted) {
+  const box=document.createElement('article'); box.className='hand-card';
+  const title=document.createElement('strong'); title.lang='hy'; title.textContent=wanted||'Ւ ւ';
+  if(wanted==='Ւ'){
+    const printed=document.createElement('div'); printed.className='hiwn-printed'; printed.lang='hy'; printed.textContent='Ւ';
+    const notice=document.createElement('small'); notice.textContent='Uppercase: printed reference only';
+    box.append(printed,notice);
+  } else {
+    const link=document.createElement('a'); link.href='images/hiwn-lower.svg'; link.target='_blank'; link.rel='noopener';
+    const img=document.createElement('img'); img.src=link.href; img.alt='Lowercase ւ extracted from the final component of handwritten ու'; img.className='hiwn-image'; link.append(img); box.append(link);
+  }
+  const hint=document.createElement('small'); hint.textContent='hiwn · w (romanization), /v/ in շնորհաւոր';
+  const note=document.createElement('small'); note.textContent=wanted==='Ւ'?'No verified uppercase handwriting sample in this collection.':'Lowercase ւ · extracted from the handwritten ու example';
+  const src=document.createElement('a'); src.href='https://commons.wikimedia.org/wiki/File:%D5%88%D6%82_handwritten.svg'; src.target='_blank';src.rel='noopener';src.textContent='Original handwriting source';
+  box.append(title,hint,note,src);return box;
+}
+const romanMap = {"ch'":"չ","ts'":"ց","t'":"թ","p'":"փ","k'":"ք","sh":"շ","zh":"ժ","kh":"խ","gh":"ղ","dz":"ձ","ts":"ծ","ch":"ճ","rr":"ռ","uh":"ը","eh":"է","oh":"օ","ew":"և","a":"ա","b":"բ","g":"գ","d":"դ","e":"ե","z":"զ","ë":"ը","ə":"ը","ē":"է","i":"ի","l":"լ","x":"խ","k":"կ","h":"հ","m":"մ","y":"յ","n":"ն","o":"ո","p":"պ","j":"ջ","s":"ս","v":"վ","w":"ւ","t":"տ","r":"ր","u":"ու","q":"ք","f":"ֆ","š":"շ","ž":"ժ","č":"ճ","ł":"ղ","ṙ":"ռ","ō":"օ","c":"ծ"};
 const presets = [
   {
-    "label": "Happy birthday! (informal)",
+    "label": "Happy birthday! (Eastern, informal)",
     "latin": "Shnorhavor tsnundd.",
     "armenian": "Շնորհավոր ծնունդդ։"
   },
   {
-    "label": "Happy birthday! (formal)",
+    "label": "Happy birthday! (Eastern, formal)",
     "latin": "Shnorhavor Dzer tsnunduh.",
     "armenian": "Շնորհավոր Ձեր ծնունդը։"
+  },
+  {
+    "label": "Happy birthday! (Western, formal)",
+    "latin": "Shnorhawor Dzer tsnunduh.",
+    "armenian": "Շնորհաւոր Ձեր ծնունդը։"
   }
 ];
 function transliterate(input) {
