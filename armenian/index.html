@@ -22,6 +22,22 @@
   .hand-controls { display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
   .hand-controls input { padding:10px 12px; border:1px solid #aaa; border-radius:8px; color:#222; background:white; min-width:0; }
   .hand-controls button { padding:10px; cursor:pointer; }
+  .guide-presets { display:flex; flex-wrap:wrap; gap:8px; margin:14px 0; }
+  .guide-presets button { padding:10px 14px; border-radius:8px; cursor:pointer; }
+  .guide-input { display:grid; gap:8px; margin:16px 0; }
+  .guide-input textarea { width:100%; box-sizing:border-box; padding:12px; border:1px solid #aaa; border-radius:8px; background:#fff; color:#222; font:inherit; resize:vertical; }
+  .roman-help { margin:12px 0; }
+  .roman-help summary { cursor:pointer; font-weight:600; }
+  .roman-key { display:flex; flex-wrap:wrap; gap:6px; }
+  .roman-key span { border:1px solid #aaa; border-radius:5px; padding:4px 7px; font-size:.9rem; }
+  .guide-word { margin:18px 0; }
+  .guide-word h3 { font-size:1.3rem; margin:0 0 8px; }
+  .guide-word .hand-grid { margin:0; }
+  .symbol-card { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:95px; }
+  .symbol-card strong { font-size:2.4rem; }
+  #sentence-warning { color:#98511a; font-weight:600; }
+  #sentence-preview { overflow-wrap:anywhere; }
+  @media print { .guide-presets, .guide-input, .roman-help {display:none!important} }
   @media(max-width:420px){.hand-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.hand-card{padding:6px}}
   @media print { .hand-controls, .site-header, .back-link {display:none!important} .hand-card {break-inside:avoid} .hand-grid {grid-template-columns:repeat(5,1fr)} }
 </style>
@@ -34,13 +50,25 @@
 <p class="kicker">07 / ARMENIAN · ՀԱՅԵՐԵՆ</p>
 <h1>Armenian handwriting</h1>
 <p>Compare printed letters with real handwritten uppercase (left) and lowercase (right). Armenian is written from left to right. Click any illustration to enlarge its original SVG.</p>
-<section aria-labelledby="birthday">
-<h2 id="birthday">Write your first greeting</h2>
-<p class="phrase" lang="hy">Շնորհավոր ծնունդդ։</p>
-<p><strong>Happy birthday!</strong> · Letter-by-letter: sh-n-o-r-h-a-v-o-r ts-n-u-n-d-d (Eastern Armenian; spoken pronunciation includes unwritten vowels). The ending դ is written twice. The two dots ։ are the Armenian full stop.</p>
-<h3 lang="hy">Շնորհավոր</h3><div class="hand-grid phrase-grid" id="word-one"></div>
-<h3 lang="hy">ծնունդդ</h3><div class="hand-grid phrase-grid" id="word-two"></div>
-<p>Use the left-hand shape for the initial Շ; use the right-hand shape for all the other letters. Ու / ու represents one vowel with two characters.</p>
+<section aria-labelledby="writing-guide">
+<h2 id="writing-guide">Sentence writing guide</h2>
+<p>Type Armenian using Latin letters, or paste Armenian text. The guide shows each handwritten letter in order. This is a transliteration tool, not an English-to-Armenian translator.</p>
+<div class="guide-presets" id="presets" aria-label="Example sentences"></div>
+<div class="guide-input">
+<label for="sentence"><strong>Sentence in Latin letters</strong></label>
+<textarea id="sentence" rows="2" maxlength="240" spellcheck="false" autocomplete="off" aria-describedby="roman-help" placeholder="Shnorhavor tsnundd."></textarea>
+</div>
+<details id="roman-help" class="roman-help">
+<summary>Transliteration key &amp; spelling tips</summary>
+<p>These are Eastern Armenian letter-by-letter conventions, not automatic phonetic spelling. Capitalize a Latin letter or digraph to get its uppercase Armenian form. At the start of a word, <code>ye</code> and <code>vo</code> give ե and ո. A period becomes the Armenian full stop (։).</p>
+<div id="roman-key" class="roman-key"></div>
+<p>Use <code>ch'</code>, <code>ts'</code>, <code>t'</code>, <code>p'</code>, <code>k'</code> for aspirated consonants. <code>uh</code> (or ë) writes ը; <code>eh</code> writes է; <code>oh</code> writes օ; <code>ew</code> writes և. <code>u</code> writes the two-character vowel ու. For ambiguous spellings, type or paste the exact Armenian letter. Spoken vowels may be unwritten, so check unfamiliar words against a dictionary.</p>
+</details>
+<p class="phrase" lang="hy" id="sentence-preview" aria-live="polite"></p>
+<p id="sentence-warning" role="status" hidden></p>
+<div class="hand-controls"><button type="button" class="secondary-btn" id="copy-sentence">Copy Armenian text</button><span id="copy-status" role="status"></span></div>
+<div id="sentence-guide"></div>
+<p>Use the left-hand shape for uppercase and the right-hand shape for lowercase. Click an image to see it at full size.</p>
 </section>
 <section aria-labelledby="alphabet">
 <h2 id="alphabet">The complete modern alphabet</h2>

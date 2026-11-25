@@ -322,7 +322,7 @@ function card(row, wanted) {
   const box = document.createElement('article');
   box.className = 'hand-card';
   const a = document.createElement('a');
-  a.href = remote; a.target = '_blank'; a.rel = 'noopener';
+  a.href = 'images/' + encodeURIComponent(filename); a.target = '_blank'; a.rel = 'noopener';
   const img = document.createElement('img');
   img.alt = 'Handwritten ' + upper + ' (left) and ' + lower + ' (right)';
   img.width=512; img.height=512; img.loading=wanted?'eager':'lazy';
@@ -332,18 +332,110 @@ function card(row, wanted) {
   const title=document.createElement('strong'); title.lang='hy'; title.textContent=wanted || upper+' '+lower; box.append(title);
   const hint=document.createElement('small'); hint.textContent=roman+' · /'+east+'/ (Eastern)'; box.append(hint);
   if(wanted) {
-    const which=document.createElement('small'); which.className='case-label'; which.textContent=wanted===upper?'LEFT · uppercase':'RIGHT · lowercase'; box.append(which);
+    const which=document.createElement('small'); which.className='case-label'; which.textContent=(wanted===upper || wanted===wanted.toUpperCase() || wanted==='Ու')?'LEFT · uppercase':'RIGHT · lowercase'; box.append(which);
   } else {
     const w=document.createElement('small'); w.textContent='/'+west+'/ (Western)'; box.append(w);
     const src=document.createElement('a'); src.href=source; src.target='_blank'; src.rel='noopener'; src.textContent='Source'; box.append(src);
   }
   return box;
 }
-function phrase(id,parts) {
-  document.getElementById(id).replaceChildren(...parts.map(g=>card(byLower.get(g.toLowerCase()),g)));
+const romanMap = {"ch'":"չ","ts'":"ց","t'":"թ","p'":"փ","k'":"ք","sh":"շ","zh":"ժ","kh":"խ","gh":"ղ","dz":"ձ","ts":"ծ","ch":"ճ","rr":"ռ","uh":"ը","eh":"է","oh":"օ","ew":"և","a":"ա","b":"բ","g":"գ","d":"դ","e":"ե","z":"զ","ë":"ը","ə":"ը","ē":"է","i":"ի","l":"լ","x":"խ","k":"կ","h":"հ","m":"մ","y":"յ","n":"ն","o":"ո","p":"պ","j":"ջ","s":"ս","v":"վ","t":"տ","r":"ր","u":"ու","q":"ք","f":"ֆ","š":"շ","ž":"ժ","č":"ճ","ł":"ղ","ṙ":"ռ","ō":"օ","c":"ծ"};
+const presets = [
+  {
+    "label": "Happy birthday! (informal)",
+    "latin": "Shnorhavor tsnundd.",
+    "armenian": "Շնորհավոր ծնունդդ։"
+  },
+  {
+    "label": "Happy birthday! (formal)",
+    "latin": "Shnorhavor Dzer tsnunduh.",
+    "armenian": "Շնորհավոր Ձեր ծնունդը։"
+  }
+];
+function transliterate(input) {
+  const keys=Object.keys(romanMap).sort((a,b)=>b.length-a.length);
+  const unknown=new Set();
+  const output=input.normalize('NFC').replace(/[’ʼ]/g,"'").replace(/[A-Za-zëəēšžčłṙō']+/giu, word=>{
+    let result="";
+    for(let i=0;i<word.length;){
+      const rest=word.slice(i).toLowerCase();
+      const key=i===0 && rest.startsWith("ye") ? "ye" : i===0 && rest.startsWith("vo") ? "vo" : keys.find(k=>rest.startsWith(k));
+      if(!key){const ch=word[i++];if(ch!=="'")unknown.add(ch);result+=ch;continue;}
+      let glyph=key==="ye"?"ե":key==="vo"?"ո":romanMap[key];
+      const first=word[i];
+      if(first===first.toUpperCase() && first!==first.toLowerCase()){
+        glyph=glyph==="ու"?"Ու":glyph==="և"?"Եվ":glyph.toUpperCase();
+      }
+      result+=glyph;
+      i+=key.length;
+    }
+    return result;
+  }).replace(/\./g,"։");
+  return {output,unknown:[...unknown]};
 }
-phrase('word-one',['Շ','ն','ո','ր','հ','ա','վ','ո','ր']);
-phrase('word-two',['ծ','ն','ու','ն','դ','դ']);
+function splitArmenian(word) {
+  return word.match(/(?:[Ոո][Ււ]|[Եե]ւ)|[\s\S]/gu)||[];
+}
+const sentence = document.getElementById('sentence');
+const preview = document.getElementById('sentence-preview');
+const guide = document.getElementById('sentence-guide');
+const warning = document.getElementById('sentence-warning');
+const copyStatus = document.getElementById('copy-status');
+const byGlyph = new Map();
+for (const row of letters) {
+  byGlyph.set(row[0],row); byGlyph.set(row[1],row);
+}
+byGlyph.set('ՈՒ',byLower.get('ու'));
+byGlyph.set('Ու',byLower.get('ու'));
+byGlyph.set('եւ',byLower.get('և'));
+function symbolCard(glyph) {
+  const box=document.createElement('article'); box.className='hand-card symbol-card';
+  const symbol=document.createElement('strong'); symbol.textContent=glyph;
+  const note=document.createElement('small');
+  note.textContent=/[\p{P}\p{N}]/u.test(glyph)?'Write as shown':'No handwriting image';
+  box.append(symbol,note); return box;
+}
+function renderSentence() {
+  const {output,unknown}=transliterate(sentence.value);
+  preview.textContent=output;
+  copyStatus.textContent='';
+  const words=output.match(/\S+/gu)||[];
+  const missing=new Set(unknown);
+  guide.replaceChildren(...words.map(word=>{
+    const group=document.createElement('section'); group.className='guide-word';
+    const title=document.createElement('h3'); title.lang='hy'; title.textContent=word;
+    const grid=document.createElement('div'); grid.className='hand-grid phrase-grid';
+    for(const glyph of splitArmenian(word)){
+      const row=byGlyph.get(glyph);
+      if(!row && /\p{L}/u.test(glyph))missing.add(glyph);
+      grid.append(row?card(row,glyph):symbolCard(glyph));
+    }
+    group.append(title,grid); return group;
+  }));
+  warning.hidden=missing.size===0;
+  warning.textContent=missing.size?'No handwriting mapping for: '+[...missing].join(', ')+'. Check the transliteration key.':'';
+  document.getElementById('copy-sentence').disabled=!output.trim();
+  document.querySelectorAll('#presets button').forEach(btn=>btn.setAttribute('aria-pressed',String(sentence.value===btn.dataset.sentence)));
+}
+for(const preset of presets){
+  const button=document.createElement('button');
+  button.type='button'; button.className='secondary-btn'; button.dataset.sentence=preset.latin;
+  button.textContent=preset.label; button.title=preset.armenian;
+  button.addEventListener('click',()=>{sentence.value=preset.latin;renderSentence();});
+  document.getElementById('presets').append(button);
+}
+const keyEntries=Object.entries(romanMap).filter(([key])=>/^[a-z]+(?:')?$/.test(key));
+for(const [latin,glyph] of keyEntries){
+  const span=document.createElement('span');span.textContent=latin+' → '+glyph;
+  document.getElementById('roman-key').append(span);
+}
+sentence.addEventListener('input',renderSentence);
+document.getElementById('copy-sentence').addEventListener('click',async()=>{
+  try {await navigator.clipboard.writeText(preview.textContent);copyStatus.textContent='Copied.';}
+  catch {copyStatus.textContent='Select and copy the Armenian text above.';}
+});
+sentence.value=presets[0].latin;
+renderSentence();
 const filter=document.getElementById('filter');
 function render() {
  const q=filter.value.toLowerCase().trim().replaceAll('/','');

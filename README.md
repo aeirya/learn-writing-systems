@@ -12,7 +12,7 @@ A small, static, browser-based study panel inspired by [esponyol-inator](https:/
 | **Kurmanji Kurdish** | 31 Hawar Latin letters |
 | **Czech** | 42 alphabet entries, including **Ch** |
 | **Hebrew** | 22 letters, their final shapes, and 7 niqqud examples |
-| **[Armenian handwriting](armenian/)** | 39 uppercase/lowercase handwriting illustrations, IPA and a birthday greeting reference |
+| **[Armenian handwriting](armenian/)** | 39 uppercase/lowercase handwriting illustrations, IPA and a live Latin-to-Armenian sentence writing guide with two birthday presets |
 
 The letter counts follow the conventions used in this tool; inventory conventions can vary, especially for Urdu and Sorani.
 
